@@ -85,6 +85,7 @@ if __name__ == "__main__":
             "USAGE: facerec_demo.py </path/to/images>")
         sys.exit()
     # Read the images and corresponding labels into X and y.
+    print("Read  images ....")
     [X, y] = read_images(sys.argv[1])
     # Convert labels to 32bit integers. This is a workaround for 64bit
     # machines, because the labels will truncated else. This is fixed in recent
@@ -92,16 +93,18 @@ if __name__ == "__main__":
     # revisions.
     #
     # Thanks to Leo Dirac for reporting:
+    X = np.asarray(X,  dtype=np.float32)
     y = np.asarray(y, dtype=np.int32)
     # Then we create a 10-fold cross validation iterator:
+    print("splitting the data...")
     skf = StratifiedKFold(n_splits=10)
-    X = np.asarray(X,  dtype=np.float32)
     cv = skf.split(X, y)
     # Now we'll create a classifier, note we wrap it up in the
     # FaceRecognizerModel we have defined in this file. This is
     # done, so we can use it in the awesome scikit-learn library:
     estimator = FaceRecognizerModel()
     # And getting the precision_scores is then as easy as writing:
+    print("cross validating...")
     precision_scores = cross_val_score(estimator, X, y,
                                        scoring=make_scorer(precision_score,
                                                            average='micro'),
@@ -111,4 +114,5 @@ if __name__ == "__main__":
     # return Array of scores of the estimator for each run of the cross
     # validation.
     #
+    print("finish")
     print(precision_scores)

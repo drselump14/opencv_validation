@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+  validation:
+    build:
+      context: .
+    image: opencv_validation
+    tty: true
+    stdin_open: true
+    volumes:
+      - $PWD:/app
+    command: python validation.py ./att-database-of-faces
